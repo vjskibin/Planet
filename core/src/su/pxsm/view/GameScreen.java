@@ -1,5 +1,6 @@
 package su.pxsm.view;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -26,13 +27,19 @@ public class GameScreen implements Screen {
     private Texture texture;
     private Texture appear;
     private SpriteBatch batch;
-    OrthographicCamera camera;
+    //OrthographicCamera camera;
     Vector3 touchPos;
     Rectangle plan;
     //Vector3 touchPos;
     Array<Rectangle> elementAppear;
     long lastAppear;
     BitmapFont font;
+    private Game game;
+
+    public GameScreen(Game game)
+    {
+        this.game = game;
+    }
 
     private void spawnElement()
     {
@@ -52,7 +59,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         texture = new Texture(Gdx.files.internal("planet.png"));
         appear = new Texture(Gdx.files.internal("person.png"));
-        camera = new OrthographicCamera();
+        //camera = new OrthographicCamera();
         touchPos = new Vector3();
         //camera.setToOrtho(false,Gdx.graphics.getWidth()*2,Gdx.graphics.getHeight()*2);
         plan = new Rectangle();
@@ -74,7 +81,7 @@ public class GameScreen implements Screen {
 
     //private float posX = 0f;
     //private float scale = Gdx.graphics.getHeight()/Gdx.graphics.getWidth();
-    int count = 0;
+    int score = 0;
 
     @Override
     public void render(float delta) {
@@ -89,7 +96,7 @@ public class GameScreen implements Screen {
             batch.draw(appear, elappear.x,elappear.y,Gdx.graphics.getHeight()/4,Gdx.graphics.getHeight()/4);
         batch.draw(texture, plan.x, plan.y,Gdx.graphics.getHeight()/2,Gdx.graphics.getHeight()/2);
 
-        font.draw(batch, Integer.toString(count), 60, 80);
+        font.draw(batch, Integer.toString(score), 60, 80);
         batch.end();
 
         if (Gdx.input.isTouched())
@@ -103,6 +110,7 @@ public class GameScreen implements Screen {
 
 
 
+
         if (TimeUtils.nanoTime() - lastAppear > 1000000000) spawnElement();
         Iterator<Rectangle> iter = elementAppear.iterator();
         while(iter.hasNext())
@@ -111,8 +119,13 @@ public class GameScreen implements Screen {
             if(elAppear.overlaps(plan))
             {
                 iter.remove();
-                count++;
+                score++;
             }
+        }
+
+        if (elementAppear.size > 3)
+        {
+            game.setScreen(new FailScreen(game, score));
         }
 
     }
@@ -143,5 +156,6 @@ public class GameScreen implements Screen {
         batch.dispose();
         appear.dispose();
         font.dispose();
+        //game.dispose();
     }
 }

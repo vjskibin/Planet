@@ -9,18 +9,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import su.pxsm.view.GameScreen;
+import su.pxsm.view.StartScreen;
 
 public class MyGame extends Game {
-	//SpriteBatch batch;
-	//Texture img;
-	private Screen gameScreen;
 	
 	@Override
 	public void create () {
-		//batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
-		gameScreen = new GameScreen();
-		setScreen(gameScreen);
+
+		setScreen(new StartScreen(this));
 	}
 
 
