@@ -44,12 +44,12 @@ public class GameScreen implements Screen {
     private void spawnElement()
     {
         Rectangle elappear = new Rectangle();
-        elappear.x = MathUtils.random(0,Gdx.graphics.getWidth());
-        elappear.y = MathUtils.random(0,Gdx.graphics.getHeight());
-        elappear.width = Gdx.graphics.getHeight() / 4;
-        elappear.height = Gdx.graphics.getHeight() / 4;
+        elappear.x = MathUtils.random(0,Gdx.graphics.getWidth() - Gdx.graphics.getHeight() / 6);
+        elappear.y = MathUtils.random(0,Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 6);
+        elappear.width = Gdx.graphics.getHeight() / 6;
+        elappear.height = Gdx.graphics.getHeight() / 6;
         elementAppear.add(elappear);
-        lastAppear = TimeUtils.nanoTime();
+        lastAppear = TimeUtils.millis();
 
     }
 
@@ -72,8 +72,8 @@ public class GameScreen implements Screen {
 
         plan.x = 0;
         plan.y = 0;
-        plan.width = Gdx.graphics.getHeight()/2;
-        plan.height = Gdx.graphics.getHeight()/2;
+        plan.width = Gdx.graphics.getHeight()/3;
+        plan.height = Gdx.graphics.getHeight()/3;
 
         elementAppear = new Array<Rectangle>();
         spawnElement();
@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
         batch.begin();
         for (Rectangle elappear: elementAppear)
             batch.draw(appear, elappear.x,elappear.y,Gdx.graphics.getHeight()/4,Gdx.graphics.getHeight()/4);
-        batch.draw(texture, plan.x, plan.y,Gdx.graphics.getHeight()/2,Gdx.graphics.getHeight()/2);
+        batch.draw(texture, plan.x, plan.y,Gdx.graphics.getHeight()/3,Gdx.graphics.getHeight()/3);
 
         font.draw(batch, Integer.toString(score), 60, 80);
         batch.end();
@@ -111,7 +111,7 @@ public class GameScreen implements Screen {
 
 
 
-        if (TimeUtils.nanoTime() - lastAppear > 1000000000) spawnElement();
+        if (TimeUtils.millis() - lastAppear > 1000 - score*2) spawnElement();
         Iterator<Rectangle> iter = elementAppear.iterator();
         while(iter.hasNext())
         {
@@ -156,6 +156,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         appear.dispose();
         font.dispose();
+
         //game.dispose();
     }
 }
